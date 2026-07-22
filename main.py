@@ -1,9 +1,4 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
+from data.processed.data_cleaning import prep_raw_data
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -11,6 +6,6 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    df=prep_raw_data(path='data/raw/apartments_rent_pl_2024_06.csv',path_shp='data/raw/dzielnice_Warszawy/dzielnice_Warszawy.shp')
+    print(df[df["district"]=="Wola"])
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
