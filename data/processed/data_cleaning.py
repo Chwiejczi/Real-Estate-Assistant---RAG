@@ -11,7 +11,7 @@ def prep_raw_data(path,path_shp):
                  'poiCount', 'type', 'id'])
     df = df.dropna()
     mapping = {'yes': 1, 'no': 0}
-    cols = ["hasParkingSpace", "hasBalcony", "hasSecurity", "hasStorageRoom"]
+    cols = ["hasParkingSpace", "hasBalcony", "hasSecurity", "hasStorageRoom","hasElevator"]
     for col in cols:
         df[col] = df[col].replace(mapping).astype(int)
     district = gpd.read_file(path_shp)
@@ -21,6 +21,8 @@ def prep_raw_data(path,path_shp):
     combined.rename(columns={"nazwa_dzie": "district"}, inplace=True)
     combined.rename(columns={"index_right": "district_number"}, inplace=True)
     combined = combined.drop(columns=["latitude", "longitude", 'geometry'])
+    mapping_cond = {'premium': 1, 'low': 0}
+    combined['condition'] = combined['condition'].replace(mapping_cond).astype(int)
 
     return combined
 
@@ -59,7 +61,7 @@ if __name__ == '__main__':
 
     #we are going to exchange 'yes/no' values with 0/1
     mapping={'yes':1,'no':0}
-    cols = ["hasParkingSpace","hasBalcony","hasSecurity","hasStorageRoom"]
+    cols = ["hasParkingSpace","hasBalcony","hasSecurity","hasStorageRoom","hasElevator"]
     for col in cols:
         df[col]=df[col].replace(mapping).astype(int)
     #print(df['hasParkingSpace'])
@@ -79,4 +81,10 @@ if __name__ == '__main__':
     combined=combined.drop(columns=["latitude","longitude",'geometry'])
     #print(combined[["district","district_number"]])
     #print(combined["geometry"])
+
+    #we need to do something with condition, bcause it is represented by str
+    #print(df["condition"].unique())
+    mapping_cond={'premium':1, 'low':0}
+    combined['condition']=combined['condition'].replace(mapping_cond).astype(int)
+    #print(combined.info())
 
