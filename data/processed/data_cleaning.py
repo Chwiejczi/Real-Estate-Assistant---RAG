@@ -27,7 +27,7 @@ def prep_raw_data(path,path_shp):
     return combined
 
 if __name__ == '__main__':
-    df=pd.read_csv("../raw/apartments_rent_pl_2024_06.csv")
+    df=pd.read_csv("../raw/apartments_pl_2024_06.csv")
     #print(df)
     #we are going to take only estates from Warsaw
     df=df[df["city"]=='warszawa']
