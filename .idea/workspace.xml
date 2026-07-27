@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3e5d3dde-72d9-4b40-94f7-19ec73df7f70" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/processed/train_ML.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/agent/agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/processed/train_ML.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/processed/train_ML.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,6 +53,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.EDA.executor": "Run",
+    "Python.agent.executor": "Run",
     "Python.data_cleaning.executor": "Run",
     "Python.main.executor": "Run",
     "Python.train_ML.executor": "Run",
