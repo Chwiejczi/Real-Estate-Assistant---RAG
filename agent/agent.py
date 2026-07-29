@@ -35,6 +35,14 @@ class RequiredElements(BaseModel):
 
     district: str | None = Field(default=None,description="District of Warsaw where the apartment is located.")
 
+
+class AssistantResponse(BaseModel):
+    message:str =Field(description="Assistant response naturally to users answers.")
+
+    completed:bool=Field(default=False,description= "True only when all required data is completed")
+
+    estateData: RequiredElements = Field(description="Estate data collected so far")
+
 if __name__ == "__main__":
     load_dotenv()
     #GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -47,7 +55,7 @@ if __name__ == "__main__":
 
     final_data=None
 
-    agent=create_agent(model=llm,system_prompt="You are a Warsaw estate assistant, that will help user to enter all needed data to make Machine Learning model prediction. Your task is to check if user entered all needed data and to check if all data is correct. Wrap this output in this format and provide no other text. You need to collect exactly these fields     squareMeters,rooms, floor, buildYear ,centreDistance, condition, hasParkingSpace, hasBalcony, hasElevator, hasSecurity, hasStorageRoom,district", response_format=ToolStrategy(RequiredElements))
+    agent=create_agent(model=llm,system_prompt="You are a Warsaw estate assistant, that will help user to enter all needed data to make Machine Learning model prediction. Your task is to check if user entered all needed data and to check if all data is correct. Wrap this output in this format and provide no other text. You need to collect exactly these fields     squareMeters,rooms, floor, buildYear ,centreDistance, condition, hasParkingSpace, hasBalcony, hasElevator, hasSecurity, hasStorageRoom,district", response_format=ToolStrategy(AssistantResponse))
 
     #chat history list
     chat_history=[]
@@ -61,26 +69,22 @@ if __name__ == "__main__":
             break
         messages=chat_history+[{"role":"user","content":user_input}]
         result=agent.invoke({"messages":messages})
-        #extract reply
-        #print(result["messages"][1].content)
+
         try:
-            #reply=result["messages"][-1].content
             required_data = result["structured_response"]
-            #print("\nTyp odpowiedzi:")
-            #print(type(required_data))
-            #print("\nObiekt Pydantic:")
-            #print(required_data)
-            print("\nDane jako słownik:")
-            print(required_data.model_dump())
+            print(required_data.message)
+            if required_data.completed:
+                print("All data have been completed, thank you")
+                break
 
         except Exception as e:
             reply=str(e)
-        #print(f"Assistant: {reply}\n")
+            break
 
         #update chat history
         chat_history.append({"role":"user","content":user_input})
         chat_history.append({"role": "assistant", "content": str(required_data)})
 
     print("data retrieved from chat:")
-    print(required_data.model_dump())
+    print(required_data.estateData)
 
