@@ -1,4 +1,5 @@
 import pandas as pd
+from agent.agent import EstateAssistant
 
 from data.processed.data_cleaning import prep_raw_data
 import joblib
@@ -41,16 +42,46 @@ def input_data():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    df=prep_raw_data(path='data/raw/apartments_pl_2024_06.csv',path_shp='data/raw/dzielnice_Warszawy/dzielnice_Warszawy.shp')
-    print(df[df["district"]=="Wola"])
-    print(df.info())
-    temp=df[['district','district_number']].drop_duplicates()
-    names_numbers_distr=dict(zip(temp['district_number'],temp['district']))
-    print(names_numbers_distr)
-    #{12: 'Targówek', 3: 'Wola', 15: 'Bielany', 9: 'Śródmieście', 2: 'Mokotów', 11: 'Ursus', 17: 'Bemowo', 0: 'Żoliborz', 16: 'Białołęka', 1: 'Praga-Południe', 8: 'Ursynów', 14: 'Ochota', 4: 'Wilanów', 10: 'Praga-Północ', 13: 'Rembertów', 6: 'Wawer', 7: 'Włochy', 5: 'Wesoła'}
-    print(df.shape)
+    ##df=prep_raw_data(path='data/raw/apartments_pl_2024_06.csv',path_shp='data/raw/dzielnice_Warszawy/dzielnice_Warszawy.shp')
+    ##print(df[df["district"]=="Wola"])
+    ##print(df.info())
+    ##temp=df[['district','district_number']].drop_duplicates()
+    ##names_numbers_distr=dict(zip(temp['district_number'],temp['district']))
+    ##print(names_numbers_distr)
+    ###{12: 'Targówek', 3: 'Wola', 15: 'Bielany', 9: 'Śródmieście', 2: 'Mokotów', 11: 'Ursus', 17: 'Bemowo', 0: 'Żoliborz', 16: 'Białołęka', 1: 'Praga-Południe', 8: 'Ursynów', 14: 'Ochota', 4: 'Wilanów', 10: 'Praga-Północ', 13: 'Rembertów', 6: 'Wawer', 7: 'Włochy', 5: 'Wesoła'}
+    ##print(df.shape)
+##
+    ##model=joblib.load('model/final_model.pkl')
+    ##df=input_data()
+    ##pred=model.predict(df)
+    ##print(f"predicted price:{pred}")
 
-    model=joblib.load('model/final_model.pkl')
-    df=input_data()
-    pred=model.predict(df)
-    print(f"predicted price:{pred}")
+    agent =EstateAssistant()
+
+
+    print("Assistant: Hi, I am your estate assistant, what can I do for you?(If you want to exit type stop)")
+
+    while True:
+        user_input = input("You:".strip())
+        if user_input.lower() == 'stop':
+            print("Thank you, goodbye!")
+            break
+
+        try:
+            response=agent.sendMessage(user_input)
+            print(response.message)
+            if response.completed:
+                print("All data have been completed, thank you")
+                break
+
+        except Exception as e:
+            reply = str(e)
+            break
+
+
+
+    #print("data retrieved from chat:")
+    data=response.estateData
+    data=data.model_dump()
+    agent.reset_conversation()
+    print(type(data))
