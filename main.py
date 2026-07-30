@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
 
     print("Assistant: Hi, I am your estate assistant, what can I do for you?(If you want to exit type stop)")
-
+    response=None
     while True:
         user_input = input("You:".strip())
         if user_input.lower() == 'stop':
@@ -87,8 +87,8 @@ if __name__ == '__main__':
         except Exception as e:
             reply = str(e)
             break
-
-
+    if response is None:
+        exit()
 
     #print("data retrieved from chat:")
     data=response.estateData
