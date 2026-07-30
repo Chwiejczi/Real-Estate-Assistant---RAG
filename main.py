@@ -3,9 +3,19 @@ from agent.agent import EstateAssistant
 
 from data.processed.data_cleaning import prep_raw_data
 import joblib
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+
+def district2num(df):
+    distDict={'Targówek':12 , 'Wola':3 , 'Bielany': 15, 'Śródmieście':9 , 'Mokotów': 2, 'Ursus':11 , 'Bemowo': 17, 'Żoliborz':0 , 'Białołęka':16 , 'Praga-Południe': 1, 'Ursynów': 8, 'Ochota': 14, 'Wilanów': 4, 'Praga-Północ': 10, 'Rembertów': 13, 'Wawer': 6, 'Włochy': 7, 'Wesoła': 5}
+    if df["district"] not in distDict.keys():
+        print("Given district is not valid")
+        return df
+    else:
+        df["district_number"]=distDict[df["district"]]
+        del df["district"]
+        mapping = {"premium": 1, "low": 0}
+        df["condition"] = mapping[df["condition"]]
+        return df
+
 
 def input_data():
     meters=input("Enter the number of meters: ")
@@ -84,4 +94,10 @@ if __name__ == '__main__':
     data=response.estateData
     data=data.model_dump()
     agent.reset_conversation()
-    print(type(data))
+    #print(type(data))
+    data=district2num(data)
+
+    model=joblib.load('model/final_model.pkl')
+    df=pd.DataFrame([data])
+    pred=model.predict(df)
+    print(f"predicted price:{pred}")
