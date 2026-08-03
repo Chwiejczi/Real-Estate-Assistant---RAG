@@ -1,6 +1,55 @@
 import pandas as pd
 import geopandas as gpd
 
+
+def input_data():
+    meters=input("Enter the number of meters: ")
+    rooms=input("Enter the number of rooms: ")
+    floors=input("Enter the number of floor: ")
+    years=input("Enter the build year: ")
+    centres=input("Enter the centre distance: ")
+    cond=input("Enter the condition(premium/low): ").lower()
+    parking=input("does it have parking?(1-yes, 0-no): ")
+    balcony=input("does it have balcony?(1-yes, 0-no): ")
+    elevator=input("does it have elevator?(1-yes, 0-no): ")
+    security=input("does it have security?(1-yes, 0-no): ")
+    storage=input("does it have storage?(1-yes, 0-no): ")
+    num=input("Choose number of district from the list:12: 'Targówek', 3: 'Wola', 15: 'Bielany', 9: 'Śródmieście', 2: 'Mokotów', 11: 'Ursus', 17: 'Bemowo', 0: 'Żoliborz', 16: 'Białołęka', 1: 'Praga-Południe', 8: 'Ursynów', 14: 'Ochota', 4: 'Wilanów', 10: 'Praga-Północ', 13: 'Rembertów', 6: 'Wawer', 7: 'Włochy', 5: 'Wesoła': ")
+    mapping={"premium":1,"low":0}
+    cond=mapping[cond]
+
+
+    df=pd.DataFrame({
+        "squareMeters":[meters],
+        "rooms":[rooms],
+        "floor":[floors],
+        "buildYear":[years],
+        "centreDistance":[centres],
+        "condition":[cond],
+        "hasParkingSpace":[parking],
+        "hasBalcony":[balcony],
+        "hasElevator":[elevator],
+        "hasSecurity":[security],
+        "hasStorageRoom":[storage],
+        "district_number":[num],
+    })
+    return df
+
+
+def district2num(df):
+    distDict={'Targówek':12 , 'Wola':3 , 'Bielany': 15, 'Śródmieście':9 , 'Mokotów': 2, 'Ursus':11 , 'Bemowo': 17, 'Żoliborz':0 , 'Białołęka':16 , 'Praga-Południe': 1, 'Ursynów': 8, 'Ochota': 14, 'Wilanów': 4, 'Praga-Północ': 10, 'Rembertów': 13, 'Wawer': 6, 'Włochy': 7, 'Wesoła': 5}
+    if df["district"] not in distDict.keys():
+        print("Given district is not valid")
+        return df
+    else:
+        df["district_number"]=distDict[df["district"]]
+        del df["district"]
+        mapping = {"premium": 1, "low": 0}
+        df["condition"] = mapping[df["condition"]]
+        return df
+
+
+
 def prep_raw_data(path,path_shp):
     df = pd.read_csv(path)
     df = df[df["city"] == 'warszawa']
