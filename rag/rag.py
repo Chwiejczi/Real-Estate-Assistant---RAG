@@ -13,13 +13,13 @@ class RAG_agent():
     def __init__(self):
         self.retrieve_tool=StructuredTool.from_function(func=self.retrieve_context,name="retrieve_context",description="Search the Warsaw district document for information relevant to the user's question..")
 
-        load_dotenv("../agent/.env")
+        load_dotenv("agent/.env")
         api_key=os.getenv("GROQ_API_KEY")
         self.model=ChatGroq(model='llama-3.3-70b-versatile')
         self.agent = create_agent(model=self.model, tools=[self.retrieve_tool], system_prompt=self._get_system_prompt())
 
 
-        loader=PyPDFLoader('../data/raw/panorama_dzielnic_warszawy.pdf')
+        loader=PyPDFLoader('data/raw/panorama_dzielnic_warszawy.pdf')
         self.docs=loader.load()
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         self.all_splits = text_splitter.split_documents(self.docs)

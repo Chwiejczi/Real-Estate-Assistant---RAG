@@ -1,6 +1,6 @@
 import pandas as pd
 from agent.agent import EstateAssistant
-
+from rag.rag import RAG_agent
 from data.processed.data_cleaning import prep_raw_data
 import joblib
 
@@ -65,6 +65,11 @@ if __name__ == '__main__':
     ##df=input_data()
     ##pred=model.predict(df)
     ##print(f"predicted price:{pred}")
+    rag=RAG_agent()
+    res=rag.sendMessage("ile dzieci chodzi do warszawskich szkół?")
+    print(res)
+
+
 
     agent =EstateAssistant()
 
